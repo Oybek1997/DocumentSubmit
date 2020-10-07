@@ -1,0 +1,41 @@
+version: '3'
+services:
+
+  nginx:
+    build:
+      context: ./
+      dockerfile: docker/nginx/Dockerfile
+    container_name: nginx
+    ports:
+      - 8080:80
+    volumes:
+      - ./:/var/www/html/
+
+  php-fpm:
+    build:
+      context: ./
+      dockerfile: docker/php-fpm/Dockerfile
+    container_name: php-fpm
+    ports:
+      - 9000:9000
+    volumes:
+      - ./:/var/www/html/
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    ports:
+      - 33061:3306
+    environment:
+      MYSQL_DATABASE: october
+      MYSQL_ROOT_PASSWORD: verysecret
+    volumes:
+      - ./:/var/www/html/
+
+  node:
+    build:
+      context: ./
+      dockerfile: docker/node/Dockerfile
+    volumes:
+      - ./:/var/www/html/
+    tty: true
